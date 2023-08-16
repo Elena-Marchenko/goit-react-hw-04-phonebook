@@ -4,7 +4,6 @@ import ElementList from '../elementList';
 import css from './ContactList.module.css';
 
 const ContactList = ({ items, onDeleteContact }) => {
-  console.log('items:', items);
   return (
     <div>
       <ul className={css.ul}>
