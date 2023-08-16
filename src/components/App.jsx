@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import { nanoid } from 'nanoid';
 import Form from './form';
 import Filter from './filter';
@@ -21,7 +22,7 @@ function App() {
     );
 
     if (contactForDelete) {
-      alert(`${item.name} is already in contacts.`);
+      toast.error(`${item.name} is already in contacts.`);
 
       return;
     } else {
@@ -37,6 +38,7 @@ function App() {
     setContacts(prevContacts =>
       prevContacts.filter(contact => contact.id !== contactId)
     );
+    setFilter('');
   };
 
   const getVisibleContacts = () => {
@@ -52,18 +54,20 @@ function App() {
   useEffect(() => {
     const savedState = localStorage.getItem('contacts');
     const parcedContacts = JSON.parse(savedState);
-    if (parcedContacts) setContacts(parcedContacts);
+    if (savedState) setContacts(parcedContacts);
   }, []);
 
   useEffect(() => {
-    contacts.length &&
-      localStorage.setItem('contacts', JSON.stringify(contacts));
+    contacts.length
+      ? localStorage.setItem('contacts', JSON.stringify(contacts))
+      : localStorage.clear();
   }, [contacts]);
 
   const visibleContacts = getVisibleContacts();
 
   return (
     <div className={css.section}>
+      <Toaster />
       <h1>Phonebook</h1>
       <Form onSubmit={formSubmitHandler} />
 
